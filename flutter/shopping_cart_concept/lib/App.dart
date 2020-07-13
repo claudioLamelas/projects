@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'HomePage/CarrinhoCompras.dart';
+
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
@@ -43,15 +45,17 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
+  var items = [];
 
-  void _incrementCounter() {
+  void _newItemList() {
     setState(() {
-      // This call to setState tells the Flutter framework that something has
-      // changed in this State, which causes it to rerun the build method below
-      // so that the display can reflect the updated values. If we changed
-      // _counter without calling setState(), then the build method would not be
-      // called again, and so nothing would appear to happen.
-      _counter++;
+      items.add(1.0);
+    });
+  }
+
+  void _clearList() {
+    setState(() {
+      items.clear();
     });
   }
 
@@ -61,62 +65,48 @@ class _MyHomePageState extends State<MyHomePage> {
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        leading: IconButton(
-          icon: Icon(Icons.menu),
-          onPressed: () => {},
-        ),
         title: Text(widget.title),
         centerTitle: true,
         actions: <Widget>[
           IconButton(
             icon: Icon(Icons.settings_overscan),
-            onPressed: () => {},
+            onPressed: _clearList,
           ),
         ],
         backgroundColor: Colors.red,
       ),
       body: Stack(
         children: <Widget>[
-          Container(
-            child: ListView.builder(
-              controller: ScrollController(),
-              itemCount: 25,
-              itemBuilder: (BuildContext context, int index) {
-                return ListTile(title: Text('Item $index'));
-              },
+          Padding(
+            padding: const EdgeInsets.only(bottom: 150.0),
+            child: Container(
+              child: ListView.separated(
+                controller: ScrollController(),
+                itemCount: items.length,
+                separatorBuilder: (BuildContext context, int index) =>
+                    const Divider(thickness: 1.5),
+                itemBuilder: (BuildContext context, int index) {
+                  return ListTile(title: Text('Item $index'));
+                },
+              ),
             ),
           ),
-          DraggableScrollableSheet(
-            maxChildSize: 0.8,
-            initialChildSize: 0.2,
-            minChildSize: 0.2,
-            builder: (BuildContext context, ScrollController scrollController) {
-              return Container(
-                child: ListView.builder(
-                  controller: scrollController,
-                  itemCount: 25,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ListTile(title: Text('Item $index'));
-                  },
-                ),
-                decoration: BoxDecoration(
-                  color: Colors.redAccent,
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(25),
-                    topRight: Radius.circular(25),
-                  ),
-                ),
-              );
-            },
+          Positioned(
+            top: MediaQuery.of(context).size.height * 0.63,
+            right: MediaQuery.of(context).size.width * 0.43,
+            child: FloatingActionButton(
+              onPressed: _newItemList,
+              tooltip: 'Increment',
+              child: Icon(Icons.add),
+            ),
           ),
+          CarrinhoCompras(),
         ],
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      drawer: Drawer(
+        elevation: 20.0,
+        child: Container(color: Colors.blue,)
+      ),
     );
   }
 }
