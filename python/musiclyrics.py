@@ -31,9 +31,12 @@ while True:
             if word.lower() in part['title'].lower():
                 correctWords+=1
         if correctWords == numberWords:
+            print()
             print(part['title'])
             print()
             print(part['lyrics'])
+            print()
+            print('----------------------------------------------------------------------------------')
             print()
             correctWords = 0
             break
