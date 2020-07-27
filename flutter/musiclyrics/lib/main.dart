@@ -1,4 +1,6 @@
 import 'dart:convert';
+import 'ShowLyrics.dart';
+import 'SearchLyrics.dart';
 
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
@@ -12,12 +14,13 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.deepPurple,
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: MyHomePage(title: 'Flutter Demo Home Page'),
+      home: MyHomePage(title: 'GetSomeLyrics'),
     );
   }
 }
@@ -32,46 +35,63 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  // ignore: missing_return
-  Future<String> _getdata() async {
+  String _lyrics;
+  bool onLyricsPage = false;
+  String songTitle;
+
+  String userRequest;
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+          centerTitle: true,
+          title: Text(onLyricsPage ? songTitle : widget.title),
+          leading: onLyricsPage
+              ? IconButton(
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: Colors.white,
+                  ),
+                  onPressed: returnToMainPage,
+                )
+              : null),
+      body: onLyricsPage
+          ? ShowLyrics(
+              lyrics: _lyrics,
+            )
+          : SearchLyrics(userRequest: userRequest),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerFloat,
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => print(userRequest),
+        child: Icon(Icons.music_note),
+      ),
+    );
+  }
+
+// ignore: missing_return
+  Future<String> _getlyrics() async {
     String url =
         "https://canarado-lyrics.p.rapidapi.com/lyrics/britney%2520spears%2520toxic";
+
     var headers = {
       'x-rapidapi-host': "canarado-lyrics.p.rapidapi.com",
       'x-rapidapi-key': "c67a843d17msh9a57e540bff02f7p183fb2jsn63e0c239b187"
     };
-    http.Response response = await http.get(url, headers: headers);
 
-    var data = json.decode(response.body);
+    http.Response response = await http.get(url, headers: headers);
+    var responseJson = json.decode(response.body);
 
     setState(() {
-      _data = data['content'][0]['lyrics'];
+      onLyricsPage = true;
+      songTitle = responseJson['content'][0]['title'];
+      _lyrics = responseJson['content'][0]['lyrics'];
     });
   }
 
-  String _data;
-
-  @override
-  Widget build(BuildContext context) {
-    ScrollController scrollcontroller;
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),
-      body: SingleChildScrollView(
-        controller: scrollcontroller,
-        child: Center(
-          child: Text(
-            _data == null ? 'Loading' : _data,
-            style: TextStyle(fontSize: 20),
-          ),
-        ),
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _getdata,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ),
-    );
+  void returnToMainPage() {
+    setState(() {
+      onLyricsPage = false;
+    });
   }
 }
