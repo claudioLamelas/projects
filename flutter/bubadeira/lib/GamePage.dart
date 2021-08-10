@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:bubadeira/Utils/RuleChecker.dart';
 import 'package:flutter/material.dart';
 
 import 'Common/Constant.dart';
@@ -10,9 +11,11 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
+  RuleChecker rc = new RuleChecker();
   Map data = {};
   String _numero = '';
   int _novoNumero = 0;
+  Widget _card;
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +23,8 @@ class _GamePageState extends State<GamePage> {
     _numero = data['numero'];
     if (_novoNumero != 0) {
       _numero = _novoNumero.toString();
+    } else {
+      _card = null;
     }
     int numeroNumeric = int.parse(_numero);
 
@@ -70,10 +75,12 @@ class _GamePageState extends State<GamePage> {
                 setState(() {
                   Random r = Random();
                   _novoNumero = r.nextInt(numeroNumeric) + 1;
+                  _card = rc.checkNumber(_novoNumero);
                 });
               },
             ),
           ),
+          _card != null ? _card : Container(),
         ],
       ),
     );
