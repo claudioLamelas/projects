@@ -48,15 +48,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  int _counter = 0;
-  String _texto = '';
-  TextEditingController maxNumber = new TextEditingController();
-
-  void _incrementCounter() {
-    setState(() {
-      _counter++;
-    });
-  }
+  TextEditingController maxNumberController = new TextEditingController();
 
   @override
   Widget build(BuildContext context) {
@@ -72,7 +64,7 @@ class _MyHomePageState extends State<MyHomePage> {
                 Padding(
                   padding: const EdgeInsets.only(left: 40, right: 40, top: 10),
                   child: TextField(
-                    controller: maxNumber,
+                    controller: maxNumberController,
                     keyboardType: TextInputType.number,
                     inputFormatters: [
                       WhitelistingTextInputFormatter.digitsOnly
@@ -86,6 +78,7 @@ class _MyHomePageState extends State<MyHomePage> {
                       fillColor: Constant.inputColor,
                       hintText: 'Número de Partida',
                       hintStyle: TextStyle(fontSize: 30.0),
+                      // errorText: _validateInput(maxNumberController.text),
                       focusedBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: Constant.inputBorderColor,
@@ -111,9 +104,10 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                     onPressed: () {
                       setState(() {
-                        _texto = maxNumber.text;
-                        Navigator.pushNamed(context, '/game',
-                            arguments: {'numero': maxNumber.text});
+                        if (maxNumberController.text.isNotEmpty) {
+                          Navigator.pushNamed(context, '/game',
+                              arguments: {'numero': maxNumberController.text});
+                        }
                       });
                     },
                   ),
@@ -144,5 +138,13 @@ class _MyHomePageState extends State<MyHomePage> {
         ],
       ),
     );
+  }
+
+  String _validateInput(String number) {
+    if (number.length <= 0 || number == null) {
+      return 'Insere um número';
+    } else {
+      return null;
+    }
   }
 }

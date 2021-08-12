@@ -6,12 +6,17 @@ import 'Rule.dart';
 class RuleChecker {
   RulesMap rules = new RulesMap();
 
-  Widget checkNumber(int number) {
+  List<Widget> checkNumber(int number) {
+    List<Widget> cardsList = [];
     for (Rule r in rules.getRulesMap().values) {
       if (r.checkExpression(number)) {
-        return r.card;
+        if (r.variable) {
+          r.setNShots(number);
+        }
+        r.card.nShots = r.nShots;
+        cardsList.add(r.card);
       }
     }
-    return null;
+    return cardsList;
   }
 }

@@ -5,12 +5,34 @@ class RulesMap {
 
   RulesMap() {
     _rules = {
-      1: new Rule('regra 1', 'Numero par, bebe!', (int number) {
-        return number.isEven;
-      }),
-      2: new Rule('regra 2', 'Numero impar, Manda beber!', (int number) {
-        return number.isOdd;
-      })
+      1: new Rule(
+          name: 'couvinhas de sabao aaaaaaaaaa',
+          description:
+              'Numero par, bebe! Numero par, bebe! Numero par, bebe! bebe! Numero par, bebe! bebe! Numero par, bebe! bebe!',
+          ruleExpression: (int number) {
+            return number.isOdd;
+          },
+          getNShots: (int number) {
+            return number.toString().length;
+          },
+          variable: true),
+      2: new Rule(
+          name: 'regra 2',
+          description: 'Numero impar, Manda beber!',
+          ruleExpression: (int number) {
+            return number.isOdd;
+          },
+          nShots: 4,
+          variable: false),
+      3: new Rule(
+          name: 'Ganhaste meu filho',
+          description:
+              'Parece que chegaste ao fim e por isso tens de beber a garrafa toda eheh',
+          ruleExpression: (int number) {
+            return number == 1;
+          },
+          nShots: 1000,
+          variable: false)
     };
   }
 
