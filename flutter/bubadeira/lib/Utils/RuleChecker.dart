@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:bubadeira/Common/RulesMap.dart';
 import 'package:flutter/material.dart';
 
@@ -13,7 +15,7 @@ class RuleChecker {
         if (r.variable) {
           r.setNShots(number);
         }
-        r.card.nShots = r.nShots;
+        r.card.nShots = r.nShots!;
         cardsList.add(r.card);
       }
     }

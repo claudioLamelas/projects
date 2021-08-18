@@ -21,7 +21,7 @@ class _GamePageState extends State<GamePage> {
 
   @override
   Widget build(BuildContext context) {
-    data = ModalRoute.of(context).settings.arguments;
+    data = ModalRoute.of(context)!.settings.arguments as Map;
     _numero = data['numero'];
     if (_novoNumero != 0) {
       _numero = _novoNumero.toString();
@@ -30,31 +30,92 @@ class _GamePageState extends State<GamePage> {
     }
     int numeroNumeric = int.parse(_numero);
 
-    return Scaffold(
-      backgroundColor: Constant.mainBackgroundColor,
-      appBar: AppBar(
-        elevation: 0,
-        backgroundColor: Constant.mainBackgroundColor,
-        leading: IconButton(
-          iconSize: 35,
-          icon: Icon(
-            Icons.arrow_back,
-            color: Colors.black,
+    var _continueGamebuttonBar = ButtonBar(
+      alignment: MainAxisAlignment.center,
+      children: <Widget>[
+        FloatingActionButton.extended(
+          backgroundColor: Constant.buttonColor,
+          label: Text(
+            'ROLL',
+            style: TextStyle(fontSize: 40, color: Colors.black),
+          ),
+          onPressed: () {
+            setState(() {
+              Random r = Random();
+              _novoNumero = r.nextInt(numeroNumeric) + 1;
+              _cards = rc.checkNumber(_novoNumero);
+            });
+          },
+        ),
+      ],
+    );
+
+    var _gameOverbuttonBar = ButtonBar(
+      alignment: MainAxisAlignment.center,
+      children: <Widget>[
+        FloatingActionButton.extended(
+          heroTag: null,
+          backgroundColor: Constant.buttonColor,
+          label: Text(
+            'RETURN',
+            style: TextStyle(fontSize: 25, color: Colors.black),
           ),
           onPressed: () => Navigator.of(context).pop(),
         ),
-        actions: <Widget>[
-          IconButton(
-            iconSize: 35,
-            icon: Icon(Icons.restore),
-            onPressed: () {
-              setState(() {
-                _novoNumero = 0;
-              });
-            },
+        FloatingActionButton.extended(
+          heroTag: null,
+          backgroundColor: Constant.buttonColor,
+          label: Text(
+            'RESTART',
+            style: TextStyle(fontSize: 25, color: Colors.black),
           ),
-        ],
+          onPressed: () {
+            setState(() {
+              _novoNumero = 0;
+            });
+          },
+        ),
+      ],
+    );
+
+    var normalAppBar = AppBar(
+      elevation: 0,
+      backgroundColor: Constant.mainBackgroundColor,
+      leading: IconButton(
+        iconSize: 35,
+        icon: Icon(
+          Icons.arrow_back,
+          color: Colors.black,
+        ),
+        onPressed: () => Navigator.of(context).pop(),
       ),
+      actions: <Widget>[
+        IconButton(
+          iconSize: 35,
+          icon: Icon(Icons.restore),
+          onPressed: () {
+            setState(() {
+              _novoNumero = 0;
+            });
+          },
+        ),
+      ],
+    );
+
+    var gameOverAppBar = AppBar(
+      elevation: 0,
+      backgroundColor: Constant.mainBackgroundColor,
+      title: Text(
+        'GameOver',
+        style: TextStyle(fontSize: 40),
+      ),
+      leading: Container(),
+      centerTitle: true,
+    );
+
+    return Scaffold(
+      backgroundColor: Constant.mainBackgroundColor,
+      appBar: numeroNumeric != 1 ? normalAppBar : gameOverAppBar,
       body: Column(
         children: <Widget>[
           Container(
@@ -67,25 +128,9 @@ class _GamePageState extends State<GamePage> {
           ),
           Container(
             margin: EdgeInsets.only(top: 30),
-            child: ButtonBar(
-              alignment: MainAxisAlignment.center,
-              children: <Widget>[
-                FloatingActionButton.extended(
-                  backgroundColor: Constant.buttonColor,
-                  label: Text(
-                    'ROLL',
-                    style: TextStyle(fontSize: 40, color: Colors.black),
-                  ),
-                  onPressed: () {
-                    setState(() {
-                      Random r = Random();
-                      _novoNumero = r.nextInt(numeroNumeric) + 1;
-                      _cards = rc.checkNumber(_novoNumero);
-                    });
-                  },
-                ),
-              ],
-            ),
+            child: numeroNumeric != 1
+                ? _continueGamebuttonBar
+                : _gameOverbuttonBar,
           ),
           _cards.length != 0
               ? Expanded(
@@ -118,10 +163,10 @@ class _GamePageState extends State<GamePage> {
 
 class CardPageController extends StatelessWidget {
   const CardPageController({
-    Key key,
-    @required PageController controller,
-    @required int currentCardIndex,
-    @required List<Widget> cards,
+    Key? key,
+    required PageController controller,
+    required int currentCardIndex,
+    required List<Widget> cards,
   })  : _controller = controller,
         _currentCardIndex = currentCardIndex,
         _cards = cards,

@@ -1,7 +1,7 @@
 import '../Utils/Rule.dart';
 
 class RulesMap {
-  Map<int, Rule> _rules;
+  Map<int, Rule> _rules = {};
 
   RulesMap() {
     _rules = {
@@ -15,7 +15,8 @@ class RulesMap {
           getNShots: (int number) {
             return number.toString().length;
           },
-          variable: true),
+          variable: true,
+          timeToFinish: 10),
       2: new Rule(
           name: 'regra 2',
           description: 'Numero impar, Manda beber!',
@@ -32,7 +33,15 @@ class RulesMap {
             return number == 1;
           },
           nShots: 1000,
-          variable: false)
+          variable: false),
+      4: new Rule(
+          name: 'Teste de regra by chance',
+          description:
+              'Se isto funcionar até é bacano, devias beber um copo para festejar',
+          ruleExpression: (int number) {},
+          nShots: 20,
+          variable: false,
+          probability: 99)
     };
   }
 

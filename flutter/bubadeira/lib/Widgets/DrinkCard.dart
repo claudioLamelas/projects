@@ -4,9 +4,15 @@ import 'package:flutter/material.dart';
 class DrinkCard extends StatelessWidget {
   final String name;
   final String description;
-  int nShots; // ver ser consigo tornar isto num late final
+  final double? timeToFinish;
+  late int nShots; // ver ser consigo tornar isto num late final
 
-  DrinkCard({Key key, this.name, this.description}) : super(key: key);
+  DrinkCard(
+      {Key? key,
+      required this.name,
+      required this.description,
+      this.timeToFinish})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +53,13 @@ class DrinkCard extends StatelessWidget {
               ),
             ),
           ),
+          timeToFinish! > 0
+              ? IconButton(
+                  icon: Icon(Icons.timer),
+                  onPressed: () => Navigator.pushNamed(context, '/cronometer',
+                      arguments: {'time': timeToFinish}),
+                )
+              : Container(),
           Flexible(
             flex: 1,
             child: Align(
