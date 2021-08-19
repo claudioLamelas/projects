@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:bubadeira/Common/GameModes.dart';
 import 'package:bubadeira/Utils/RuleChecker.dart';
 import 'package:flutter/material.dart';
 
@@ -11,24 +12,32 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
-  RuleChecker rc = new RuleChecker();
-  Map data = {};
+  RuleChecker _rc = new RuleChecker();
+  Map _data = {};
   String _numero = '';
+  GameMode? _selectedGameMode;
   int _novoNumero = 0;
   List<Widget> _cards = [];
   int _currentCardIndex = 1;
-  PageController _controller = new PageController(initialPage: 0);
+  late PageController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = new PageController(initialPage: 0, keepPage: false);
+  }
 
   @override
   Widget build(BuildContext context) {
-    data = ModalRoute.of(context)!.settings.arguments as Map;
-    _numero = data['numero'];
+    _data = ModalRoute.of(context)!.settings.arguments as Map;
+    _numero = _data['numero'];
+    _selectedGameMode = _data['gameMode'];
     if (_novoNumero != 0) {
       _numero = _novoNumero.toString();
     } else {
       _cards = [];
     }
-    int numeroNumeric = int.parse(_numero);
+    int _numeroNumeric = int.parse(_numero);
 
     var _continueGamebuttonBar = ButtonBar(
       alignment: MainAxisAlignment.center,
@@ -42,8 +51,15 @@ class _GamePageState extends State<GamePage> {
           onPressed: () {
             setState(() {
               Random r = Random();
-              _novoNumero = r.nextInt(numeroNumeric) + 1;
-              _cards = rc.checkNumber(_novoNumero);
+              _novoNumero = r.nextInt(_numeroNumeric) + 1;
+              _cards = _rc.checkNumber(
+                  _novoNumero, _selectedGameMode!.ruleCheckerState);
+              _currentCardIndex = 1;
+
+              //Tentar dar dispose aqui
+              if (_cards.isNotEmpty && _controller.hasClients) {
+                _controller.jumpToPage(0);
+              }
             });
           },
         ),
@@ -71,6 +87,7 @@ class _GamePageState extends State<GamePage> {
           ),
           onPressed: () {
             setState(() {
+              _currentCardIndex = 1;
               _novoNumero = 0;
             });
           },
@@ -81,6 +98,11 @@ class _GamePageState extends State<GamePage> {
     var normalAppBar = AppBar(
       elevation: 0,
       backgroundColor: Constant.mainBackgroundColor,
+      title: Text(
+        _selectedGameMode!.name,
+        style: TextStyle(fontSize: 40),
+      ),
+      centerTitle: true,
       leading: IconButton(
         iconSize: 35,
         icon: Icon(
@@ -115,7 +137,7 @@ class _GamePageState extends State<GamePage> {
 
     return Scaffold(
       backgroundColor: Constant.mainBackgroundColor,
-      appBar: numeroNumeric != 1 ? normalAppBar : gameOverAppBar,
+      appBar: _numeroNumeric != 1 ? normalAppBar : gameOverAppBar,
       body: Column(
         children: <Widget>[
           Container(
@@ -128,7 +150,7 @@ class _GamePageState extends State<GamePage> {
           ),
           Container(
             margin: EdgeInsets.only(top: 30),
-            child: numeroNumeric != 1
+            child: _numeroNumeric != 1
                 ? _continueGamebuttonBar
                 : _gameOverbuttonBar,
           ),

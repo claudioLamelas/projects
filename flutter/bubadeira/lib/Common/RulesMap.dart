@@ -16,7 +16,8 @@ class RulesMap {
             return number.toString().length;
           },
           variable: true,
-          timeToFinish: 10),
+          timeToFinish: 10,
+          priorityLevel: 1),
       2: new Rule(
           name: 'regra 2',
           description: 'Numero impar, Manda beber!',
@@ -24,7 +25,8 @@ class RulesMap {
             return number.isOdd;
           },
           nShots: 4,
-          variable: false),
+          variable: false,
+          priorityLevel: 1),
       3: new Rule(
           name: 'Ganhaste meu filho',
           description:
@@ -33,7 +35,8 @@ class RulesMap {
             return number == 1;
           },
           nShots: 1000,
-          variable: false),
+          variable: false,
+          priorityLevel: 5),
       4: new Rule(
           name: 'Teste de regra by chance',
           description:
@@ -41,7 +44,8 @@ class RulesMap {
           ruleExpression: (int number) {},
           nShots: 20,
           variable: false,
-          probability: 99)
+          probability: 40,
+          priorityLevel: 2)
     };
   }
 

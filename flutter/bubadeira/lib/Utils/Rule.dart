@@ -13,6 +13,7 @@ class Rule {
   bool variable;
   int probability; //Se uma regra tiver este campo preenchido então é uma regra que se verifica dada essa probabilidade
   double timeToFinish;
+  int priorityLevel;
 
   Rule(
       {required this.name,
@@ -22,11 +23,13 @@ class Rule {
       this.getNShots,
       required this.variable,
       this.probability = 0,
-      this.timeToFinish = 0}) {
+      this.timeToFinish = 0,
+      required this.priorityLevel}) {
     this.card = new DrinkCard(
       name: this.name,
       description: this.description,
       timeToFinish: this.timeToFinish,
+      priorityLevel: this.priorityLevel,
     );
   }
 

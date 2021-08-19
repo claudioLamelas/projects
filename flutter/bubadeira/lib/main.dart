@@ -54,6 +54,8 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   TextEditingController maxNumberController = new TextEditingController();
   List<GameMode> gameModes = new GameModes().gameModes;
+  GameMode? selectedGameMode;
+  int selectedGameModeIndex = -1;
 
   @override
   Widget build(BuildContext context) {
@@ -65,7 +67,9 @@ class _MyHomePageState extends State<MyHomePage> {
           IconButton(
             icon: Icon(Icons.settings),
             iconSize: 35,
-            onPressed: () {},
+            onPressed: () {
+              print(this.selectedGameMode?.name);
+            },
           )
         ],
       ),
@@ -103,12 +107,25 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
           ),
           ButtonBar(
+            //Maybe i can extract this widget to make setState more performant
             alignment: MainAxisAlignment.center,
             children: [
               for (var gameMode in this.gameModes)
                 ElevatedButton(
                   child: Text(gameMode.name),
-                  onPressed: () {},
+                  style: this.selectedGameModeIndex ==
+                          this.gameModes.indexOf(gameMode)
+                      ? ButtonStyle(
+                          backgroundColor:
+                              MaterialStateProperty.all<Color>(Colors.red))
+                      : ButtonStyle(),
+                  onPressed: () {
+                    setState(() {
+                      this.selectedGameMode = gameMode;
+                      this.selectedGameModeIndex =
+                          this.gameModes.indexOf(gameMode);
+                    });
+                  },
                 )
             ],
           ),
@@ -123,10 +140,13 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 setState(() {
                   if (maxNumberController.text.isNotEmpty &&
-                      int.parse(maxNumberController.text) > 1) {
+                      int.parse(maxNumberController.text) > 1 &&
+                      this.selectedGameMode != null) {
                     FocusScope.of(context).unfocus(); //hides keyboard
-                    Navigator.pushNamed(context, '/game',
-                        arguments: {'numero': maxNumberController.text});
+                    Navigator.pushNamed(context, '/game', arguments: {
+                      'numero': maxNumberController.text,
+                      'gameMode': selectedGameMode
+                    });
                   }
                 });
               },
