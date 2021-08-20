@@ -6,6 +6,7 @@ class DrinkCard extends StatelessWidget {
   final String description;
   final double? timeToFinish;
   late int nShots; // ver ser consigo tornar isto num late final
+  final bool isChance;
   final int priorityLevel;
 
   DrinkCard(
@@ -13,6 +14,7 @@ class DrinkCard extends StatelessWidget {
       required this.name,
       required this.description,
       this.timeToFinish,
+      required this.isChance,
       required this.priorityLevel})
       : super(key: key);
 

@@ -45,7 +45,15 @@ class RulesMap {
           nShots: 20,
           variable: false,
           probability: 40,
-          priorityLevel: 2)
+          priorityLevel: 2),
+      5: new Rule(
+          name: 'Teste de regra by chance 2',
+          description: 'Esta é a segunda Carta By Chance!!!',
+          ruleExpression: (int number) {},
+          nShots: 40,
+          variable: false,
+          probability: 80,
+          priorityLevel: 2),
     };
   }
 

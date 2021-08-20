@@ -29,6 +29,7 @@ class Rule {
       name: this.name,
       description: this.description,
       timeToFinish: this.timeToFinish,
+      isChance: this.probability > 0,
       priorityLevel: this.priorityLevel,
     );
   }
