@@ -1,10 +1,9 @@
 import 'dart:math';
 
+import 'package:bubadeira/Common/Constant.dart';
 import 'package:bubadeira/Common/GameModes.dart';
-import 'package:bubadeira/Utils/RuleChecker.dart';
+import 'package:bubadeira/Utils/rules/RuleChecker.dart';
 import 'package:flutter/material.dart';
-
-import 'Common/Constant.dart';
 
 class GamePage extends StatefulWidget {
   @override
@@ -100,7 +99,7 @@ class _GamePageState extends State<GamePage> {
       backgroundColor: Constant.mainBackgroundColor,
       title: Text(
         _selectedGameMode!.name,
-        style: TextStyle(fontSize: 40),
+        style: TextStyle(fontSize: 35),
       ),
       centerTitle: true,
       leading: IconButton(

@@ -1,11 +1,13 @@
 import 'package:bubadeira/Common/Constant.dart';
 import 'package:bubadeira/Common/GameModes.dart';
+import 'package:bubadeira/Pages/Rules/RuleListPage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'Common/GameModes.dart';
-import 'CronometerPage.dart';
-import 'GamePage.dart';
+import 'Pages/Game/CronometerPage.dart';
+import 'Pages/Game/GamePage.dart';
+import 'Widgets/BottomNavBar.dart';
 
 void main() {
   runApp(MyApp());
@@ -17,11 +19,12 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Flutter Demo',
-      initialRoute: '/',
+      initialRoute: '/home',
       routes: {
-        '/': (context) => MyHomePage(title: ''),
+        '/home': (context) => MyHomePage(title: ''),
         '/game': (context) => GamePage(),
         '/cronometer': (context) => CronometerPage(),
+        '/rulesList': (context) => RuleListPage(),
       },
       theme: ThemeData(
         // primarySwatch: Colors.deepOrange,
@@ -154,27 +157,8 @@ class _MyHomePageState extends State<MyHomePage> {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigationBar(
-        elevation: 0,
-        fixedColor: Constant.footer_icon_Color,
-        backgroundColor: Constant.footerColor,
-        items: [
-          BottomNavigationBarItem(
-            label: 'Home',
-            icon: Icon(Icons.home),
-            activeIcon: Icon(
-              Icons.local_drink,
-            ),
-          ),
-          BottomNavigationBarItem(
-            label: 'Rules',
-            icon: Icon(Icons.list),
-          ),
-          BottomNavigationBarItem(
-            label: 'Memories',
-            icon: Icon(Icons.photo_album),
-          ),
-        ],
+      bottomNavigationBar: BottomNavBar(
+        activeIndex: 0,
       ),
     );
   }

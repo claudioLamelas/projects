@@ -1,14 +1,15 @@
 import 'dart:math';
-import "package:collection/collection.dart";
 
-import 'package:bubadeira/Common/RulesMap.dart';
+import 'package:bubadeira/Common/Rules.dart';
 import 'package:bubadeira/Widgets/DrinkCard.dart';
+import "package:collection/collection.dart";
 import 'package:flutter/material.dart';
 
 import 'Rule.dart';
 
 class RuleChecker {
-  RulesMap rules = new RulesMap();
+  Future<List<Rule>> rules = Rules.rules;
+  List<Rule> rules2 = [];
 
   List<Widget> checkNumber(int number, int gameMode) {
     List<DrinkCard> cardsList;
@@ -75,13 +76,22 @@ class RuleChecker {
 
   List<DrinkCard> getAppliedDrinkCards(int number) {
     List<DrinkCard> cardsList = [];
-    for (Rule r in rules.getRulesMap().values) {
+    Rules.rules.then((value) => rules2 = value);
+    for (Rule r in rules2) {
       if (r.checkExpression(number)) {
         if (r.variable) {
           r.setNShots(number);
         }
-        r.card.nShots = r.nShots!;
-        cardsList.add(r.card);
+
+        DrinkCard card = new DrinkCard(
+            name: r.name,
+            description: r.description,
+            timeToFinish: r.timeToFinish,
+            isChance: r.probability > 0,
+            priorityLevel: r.priorityLevel);
+
+        card.nShots = r.nShots!;
+        cardsList.add(card);
       }
     }
     return cardsList;

@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 class DrinkCard extends StatelessWidget {
   final String name;
   final String description;
-  final double? timeToFinish;
+  final double timeToFinish;
   late int nShots; // ver ser consigo tornar isto num late final
   final bool isChance;
   final int priorityLevel;
@@ -13,7 +13,7 @@ class DrinkCard extends StatelessWidget {
       {Key? key,
       required this.name,
       required this.description,
-      this.timeToFinish,
+      required this.timeToFinish,
       required this.isChance,
       required this.priorityLevel})
       : super(key: key);
@@ -57,7 +57,7 @@ class DrinkCard extends StatelessWidget {
               ),
             ),
           ),
-          timeToFinish! > 0
+          (timeToFinish > 0)
               ? IconButton(
                   icon: Icon(Icons.timer),
                   onPressed: () => Navigator.pushNamed(context, '/cronometer',

@@ -1,8 +1,7 @@
 import 'dart:async';
 
+import 'package:bubadeira/Common/Constant.dart';
 import 'package:flutter/material.dart';
-
-import 'Common/Constant.dart';
 
 class CronometerPage extends StatefulWidget {
   const CronometerPage({Key? key}) : super(key: key);
